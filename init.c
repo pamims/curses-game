@@ -1,4 +1,5 @@
 #include "game.h"
+#include "constants.h"
 #include <curses.h>
 
 
