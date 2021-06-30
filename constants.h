@@ -5,7 +5,7 @@
 enum window_constants {
 
 // TERMINAL SIZE
-    TERMINAL_ROWS = 2,
+    TERMINAL_ROWS = 24,
     TERMINAL_COLUMNS = 80,
     RESERVED_ROWS = 3,
 
