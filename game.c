@@ -18,11 +18,9 @@ void print_error(const char *);
 /* - FUNCTION DEFINITIONS - */
 int game_loop(void) {
     int input = '\0';
-    entity *player = (entity *)malloc(sizeof(entity));
+    entity *player = make_entity(30, 15, '@');
     if (player == NULL) return 0;
-    player->y = 15;
-    player->x = 30;
-    player->symbol = '@';
+    draw_screen(player);
     while (input != 'Q') {
         get_input(&input);
         update_game(&input, player);
