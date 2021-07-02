@@ -8,12 +8,13 @@ CC		:= gcc
 LINK	:= gcc
 TARGET	:= test.exe
 OBJS	:= entity.o game.o init.o main.o map.o
+FLAGS	:= -pedantic -Wall -Werror -D_FORTIFY_SOURCE=2 -g3 -O2 -pedantic
 
 # Needs changed later to support ncurses
 CURSES	:= lpdcurses
 
 $(TARGET): $(OBJS)
-	$(LINK) $(OBJS) -o $@ -$(CURSES)
+	$(LINK) $(OBJS) -o $@ -$(CURSES) $(FLAGS)
 
 entity.o: entity.c entity.h
 	$(CC) -c entity.c

@@ -5,17 +5,17 @@
 /* - STRUCT DEFINITIONS - */
 struct s_entity {
     int x, y;
-    char symbol;
+    char image;
 };
 
 
 /* - FUNCTION DEFINITIONS - */
-entity *make_entity(int x, int y, char symbol) {
+entity *make_entity(int x, int y, char image) {
     entity *ent = (entity *)malloc(sizeof(entity));
     if (!ent) return NULL;
     ent->x = x;
     ent->y = y;
-    ent->symbol = symbol;
+    ent->image = image;
     return ent;
 }
 
@@ -30,6 +30,6 @@ int move_entity(entity *ent, int dx, int dy) {
 
 int draw_entity(const entity *ent) {
     if (!ent) return 0;
-    mvaddch(ent->y, ent->x, ent->symbol);
+    mvaddch(ent->y, ent->x, ent->image);
     return 1;
 }
