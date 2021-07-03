@@ -1,17 +1,11 @@
 #include <curses.h>
 #include "game.h"
 
-/* - FUNCTION PROTOTYPES - */
-
-
-
 /* - CODE ENTRY POINT - */
 int main(int argc, char *argv[]) {
-    init_game();
-    game_loop();
-    endwin();
+    if (init_game()) {
+        game_loop();
+    }
+    clean_up();
     return 0;
 }
-
-
-/* - FUNCTION DEFINITIONS - */

@@ -6,21 +6,19 @@
 
 
 /* - STRUCT DEFINITIONS - */
-struct s_tile {
+// Represents a single tile on the map
+typedef struct s_tile {
     unsigned char properties;
-}; // tile
+} tile;
 // typedef unsigned char tile;
 
 struct s_tile_map {
     tile array[MAP_HEIGHT][MAP_WIDTH];
-    // Not yet implemented
-    // struct s_tile_map *previous;
-    // struct s_tile_map *next;
 }; // tile_map
 
 typedef struct s_room {
-    int x, y;
-    size_t width, height;
+    int x1, y1, x2, y2;
+    //size_t width, height;
 } room;
 
 
@@ -36,39 +34,46 @@ room *make_room(int x, int y, size_t width, size_t height) {
     // -- do the asserts --
     room *r = (room *)malloc(sizeof(room));
     if (!r) return NULL;
-    r->x = x;
-    r->y = y;
-    r->width = width;
-    r->height = height;
+    r->x1 = x;
+    r->y1 = y;
+    r->x2 = x + width - 1;
+    r->y2 = y + height - 1;
     return r;
 }
 
-tile_map *make_tile_map() {
+tile_map *make_tile_map(void) {
     tile_map *map = (tile_map *)malloc(sizeof(tile_map));
     if (!map) return NULL;
     for (int row = 0; row < MAP_HEIGHT; row++)
         for (int column = 0; column < MAP_WIDTH; column++)
             map->array[row][column] = make_tile(TF_NONE);
-    room *r = make_room(25, 10, 20, 8);
-    for (int row = r->y; row < r->y + r->height; row++)
-        for (int col = r->x; col < r->x + r->width; col++) {
-            map->array[row][col].properties = TF_VISIBLE;
-        }
-    for (int row = 0; row < MAP_HEIGHT; row++)
-        for (int col = 0; col < MAP_WIDTH; col++) {
-            unsigned char properties = map->array[row][col].properties;
-            if (properties & TF_VISIBLE) {
-                if (map->array[row][col + 1].properties == TF_NONE ||
-                    map->array[row][col - 1].properties == TF_NONE ||
-                    map->array[row + 1][col].properties == TF_NONE ||
-                    map->array[row - 1][col].properties == TF_NONE) {
-                    map->array[row][col].properties |= TF_SOLID;
-                }
-            }
-        }
     return map;
 }
 
+int generate_map_rooms(tile_map *map) {
+    if (!map) return 0;
+    // Magic numbers test room until random generation is implemented...
+    room *r = make_room(25, 10, 20, 8);
+    if (!r) return 0;
+    unsigned char tile_properties = TF_NONE;
+    for (int row = r->y1; row <= r->y2; row++)
+        for (int column = r->x1; column <= r->x2; column++) {
+            tile_properties = TF_VISIBLE;
+            if (row == r->y1 || row == r->y2)
+                tile_properties |= TF_SOLID;
+                // -- make it a ceiling or floor
+            else if (column == r->x1 || column == r->x2)
+                tile_properties |= TF_SOLID;
+                // -- make it a wall
+            // More map construction logic
+            map->array[row][column].properties = tile_properties;
+            tile_properties = TF_NONE;
+        }
+    // don't forget to clean up the room pointer
+    // might end up returning pointers later for a room list data structure...
+    free(r);
+    return 1;
+}
 
 int draw_tile_map(const tile_map *map) {
     if (!map) return 0;
@@ -85,12 +90,17 @@ int draw_tile_map(const tile_map *map) {
     return 1;
 }
 
-
 int destroy_tile_map(tile_map *map) {
     if (!map) return 0;
     // THIS WILL NEED CHANGED WHEN MULTIPLE LEVELS IMPLEMENTED
     // if (map->previous) free(map->previous);
     // if (map->next) free(map->next);
     free(map);
+    return 1;
+}
+
+int map_collision(int x, int y, tile_map *map) {
+    if (!map || !(map->array[y][x].properties & (TF_SOLID | TF_OCCUPIED)))
+        return 0;
     return 1;
 }

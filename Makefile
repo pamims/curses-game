@@ -7,7 +7,7 @@ endif
 CC		:= gcc
 LINK	:= gcc
 TARGET	:= test.exe
-OBJS	:= entity.o game.o init.o main.o map.o
+OBJS	:= entity.o game.o main.o map.o
 FLAGS	:= -pedantic -Wall -Werror -D_FORTIFY_SOURCE=2 -g3 -O2 -pedantic
 
 # Needs changed later to support ncurses
@@ -19,11 +19,8 @@ $(TARGET): $(OBJS)
 entity.o: entity.c entity.h
 	$(CC) -c entity.c
 
-game.o: game.c entity.h game.h
+game.o: game.c constants.h entity.h game.h
 	$(CC) -c game.c
-
-init.o: init.c constants.h game.h
-	$(CC) -c init.c
 
 main.o: main.c game.h
 	$(CC) -c main.c

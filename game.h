@@ -3,13 +3,9 @@
 
 
 /* - FUNCTION PROTOTYPES - */
-// Initialize all of the important stuff
-int init_game(void); // defined in init.c
-// Main game loop
-int game_loop(void); // defined in game.c
-// Clean up all of the things
-int clean_up(void); // not yet defined
-
+int init_game(void);    // Initialize all of the important stuff
+int game_loop(void);    // Main game loop
+int clean_up(void);     // Clean up all of the things
 
 
 #endif //GAME_H

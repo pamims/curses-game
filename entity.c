@@ -19,7 +19,6 @@ entity *make_entity(int x, int y, char image) {
     return ent;
 }
 
-
 int move_entity(entity *ent, int dx, int dy) {
     if (!ent) return 0;
     ent->x += dx;
@@ -27,9 +26,24 @@ int move_entity(entity *ent, int dx, int dy) {
     return 1;
 }
 
-
 int draw_entity(const entity *ent) {
     if (!ent) return 0;
     mvaddch(ent->y, ent->x, ent->image);
     return 1;
+}
+
+int destroy_entity(entity *ent) {
+    if (!ent) return 0;
+    free(ent);
+    return 1;
+}
+
+int entity_x_position(entity *ent) {
+    if (!ent) return 0;
+    return ent->x;
+}
+
+int entity_y_position(entity *ent) {
+    if (!ent) return 0;
+    return ent->y;
 }

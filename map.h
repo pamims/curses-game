@@ -3,18 +3,15 @@
 
 
 /* - STRUCTS - */
-// Represents a single tile of a map
-typedef struct s_tile tile;
 typedef struct s_tile_map tile_map;
 
 
 /* - FUNCTION PROTOTYPES - */
-// Makes a map of tiles with the given dimensions
-tile_map *make_tile_map(void);
-// Draws the map to the screen
-int draw_tile_map(const tile_map *map);
-// Frees all map memory
-int destroy_tile_map(tile_map *map);
+tile_map *make_tile_map(void);                  // Allocate a map
+int generate_map_rooms(tile_map *map);          // Put rooms on the map
+int draw_tile_map(const tile_map *map);         // Draws the map to the screen
+int destroy_tile_map(tile_map *map);            // Frees all map memory
+int map_collision(int x, int y, tile_map *map); // Returns true if map collision
 
 
 #endif // MAP_H

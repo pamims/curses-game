@@ -25,6 +25,10 @@
 #define MAP_HEIGHT  (TERMINAL_ROWS - RESERVED_ROWS)
 #define MAP_WIDTH   (TERMINAL_COLUMNS)
 
+// GAME STATE MESSAGE POSITION
+#define MESSAGE_Y   (MAP_HEIGHT)
+#define MESSAGE_X   0
+
 // Assert that the defined constant values make sense
 STATIC_ASSERT(TERMINAL_ROWS > RESERVED_ROWS,
     "The number of TERMINAL_ROWS must be larger "
