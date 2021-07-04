@@ -42,15 +42,6 @@ STATIC_ASSERT(RESERVED_ROWS >= 0,
 /* - WINDOW CONSTANTS - */
 
 
-/* - TILE PROPERTIES FLAGS - */
-// TF stands for TILE FLAG
-#define TF_NONE     (unsigned char)0u
-#define TF_SOLID    (unsigned char)1u
-#define TF_VISIBLE  (unsigned char)2u
-#define TF_OCCUPIED (unsigned char)4u
-/* - TILE PROPERTIES FLAGS - */
-
-
 /* - ROOM SIZE CONSTANTS - */
 #define MIN_ROOM_WIDTH 6
 #define MAX_ROOM_WIDTH 20
