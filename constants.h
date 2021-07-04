@@ -42,11 +42,13 @@ STATIC_ASSERT(RESERVED_ROWS >= 0,
 /* - WINDOW CONSTANTS - */
 
 
-/* - ROOM SIZE CONSTANTS - */
+/* - ROOM CONSTANTS - */
 #define MIN_ROOM_WIDTH 6
 #define MAX_ROOM_WIDTH 20
 #define MIN_ROOM_HEIGHT 5
 #define MAX_ROOM_HEIGHT 8
+#define MIN_ROOM_COUNT 1
+#define MAX_ROOM_COUNT 5
 
 // Enter all the static asserts
 
