@@ -11,6 +11,7 @@ static const tile_mask TM_NONE      = (tile_mask)0u;
 static const tile_mask TM_SOLID     = (tile_mask)1u;
 static const tile_mask TM_VISIBLE   = (tile_mask)2u;
 static const tile_mask TM_OCCUPIED  = (tile_mask)4u;
+static const tile_mask TM_PATH      = (tile_mask)8u;
 
 typedef struct s_room {
     int x1, y1, x2, y2;
@@ -29,6 +30,7 @@ static const unsigned char B_LEFT   = (unsigned char)192; // a corner character
 static const unsigned char T_RIGHT  = (unsigned char)191; // a corner character
 static const unsigned char B_RIGHT  = (unsigned char)217; // a corner character
 static const unsigned char FLOOR    = (unsigned char)250; //'.';
+static const unsigned char PATH     = (unsigned char)'#';
 
 
 /* - HELPER FUNCTION PROTOTYPES - */
@@ -39,6 +41,8 @@ int draw_h_line(int, int, int, const tile_map *);
 int draw_v_line(int, int, int, const tile_map *);
 int room_collision(room *, room *);
 int destroy_room(room *);
+int make_h_path(int, int, int, tile_map *);
+int make_v_path(int, int, int, tile_map *);
 
 
 /* - FUNCTION DEFINITIONS - */
@@ -60,8 +64,10 @@ int generate_map_rooms(tile_map *map) {
     map->rooms[1] = make_room(35, 15, 15, 6);
     if (room_collision(map->rooms[0], map->rooms[1])) {
         destroy_room(map->rooms[1]);
-        map->rooms[1] = NULL;
+        map->rooms[1] = make_room(35, 2, 18, 6);
     }
+    make_v_path(10, 5, 27, map);
+    make_h_path(27, 35, 5, map);
     for (int i = 0; i < MAX_ROOM_COUNT; i++) {
         if (!map->rooms[i]) break;
         add_room_to_map(map, map->rooms[i]);
@@ -75,10 +81,18 @@ int draw_tile_map(const tile_map *map) {
         if (!map->rooms[i]) break;
         draw_room_walls(map->rooms[i], map);
     }
+    tile_mask mask = TM_NONE;
     for (int row = 0; row < MAP_HEIGHT; row++)
-        for (int col = 0; col < MAP_WIDTH; col++)
-            if (map->tiles[row][col] == TM_VISIBLE)
-                mvaddch(row, col, FLOOR);
+        for (int col = 0; col < MAP_WIDTH; col++) {
+            mask = map->tiles[row][col];
+            if (mask == TM_VISIBLE) {
+                    mvaddch(row, col, FLOOR);
+                    continue;
+            } else if (mask == (TM_VISIBLE | TM_PATH)) {
+                    mvaddch(row, col, PATH);
+                    continue;
+            }
+        }
     return 1;
 }
 
@@ -148,6 +162,24 @@ int draw_v_line(int y1, int y2, int col, const tile_map *map) {
         return 0;
     for (int row = y[0]; row <= y[1]; row++)
         if (map->tiles[row][col] & TM_VISIBLE) mvaddch(row, col, V_LINE);
+    return 1;
+}
+
+int make_h_path(int x1, int x2, int row, tile_map *map) {
+    int x[2] = { (x1 < x2 ? x1 : x2), (x1 > x2 ? x1 : x2) };
+    if (x[0] < 0 || x[1] >= MAP_WIDTH || row < 0 || row >= MAP_HEIGHT)
+        return 0;
+    for (int col = x[0]; col <= x[1]; col++)
+        map->tiles[row][col] = TM_VISIBLE | TM_PATH;
+    return 1;
+}
+
+int make_v_path(int y1, int y2, int col, tile_map *map) {
+    int y[2] = { (y1 < y2 ? y1 : y2), (y1 > y2 ? y1 : y2) };
+    if (y[0] < 0 || y[1] >= MAP_HEIGHT || col < 0 || col >= MAP_WIDTH)
+        return 0;
+    for (int row = y[0]; row <= y[1]; row++)
+        map->tiles[row][col] = TM_VISIBLE | TM_PATH;
     return 1;
 }
 
