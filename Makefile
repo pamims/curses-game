@@ -1,20 +1,23 @@
 ifeq ($(OS),Windows_NT)
-	RM = cmd /c del
+	RM := cmd /c del
 else
-	RM = rm -f
+	RM := rm -f
 endif
 
 CC		:= gcc
 LINK	:= gcc
 TARGET	:= test.exe
-OBJS	:= entity.o game.o main.o map.o
-FLAGS	:= -pedantic -Wall -Werror -D_FORTIFY_SOURCE=2 -g3 -O2 -pedantic
+OBJS	:= dice.o entity.o game.o main.o map.o
+FLAGS	:= -pedantic -Wall -Werror -D_FORTIFY_SOURCE=2 -g3 -O2
 
 # Needs changed later to support ncurses
 CURSES	:= lpdcurses
 
 $(TARGET): $(OBJS)
 	$(LINK) $(OBJS) -o $@ -$(CURSES) $(FLAGS)
+
+dice.o: dice.c dice.h
+	$(CC) -c dice.c
 
 entity.o: entity.c entity.h
 	$(CC) -c entity.c
